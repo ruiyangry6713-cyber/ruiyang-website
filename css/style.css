@@ -1,4 +1,12 @@
 @charset "utf-8";
+
+/* Cross-document view transitions. This sits immediately after @charset
+   because @charset is only valid as the very first thing in a stylesheet —
+   any rule placed above it silently invalidates it.
+   Both the outgoing and incoming document must carry this rule, which they
+   do: every page links this one stylesheet. */
+@view-transition { navigation: auto; }
+
 /* ==========================================================================
    RUI YANG — PORTFOLIO
    Master stylesheet
@@ -222,6 +230,9 @@ a   { text-decoration: none; color: inherit; }
 	/* default = first item centred, so a rail with no modifier still sits
 	   correctly on screen rather than hanging off the bottom */
 	transform: translateY(-3.84vh);
+	/* pairs the rail across documents so the browser tweens its shift between
+	   pages instead of cross-fading it with the rest of the page */
+	view-transition-name: nav-rail;
 }
 
 .nav {
@@ -305,6 +316,11 @@ a   { text-decoration: none; color: inherit; }
 	flex: 1 1 auto;
 	min-height: 100vh;
 	overflow: hidden;
+	/* Smoothing for the 3D mouse tilt in js/tilt.js. The script writes the
+	   raw target angle once per frame and lets this transition do the
+	   easing — it deliberately does no easing of its own, since two layers
+	   of smoothing stacked on each other feel laggy rather than fluid. */
+	transition: transform 0.1s ease-out;
 }
 
 
@@ -500,10 +516,18 @@ a   { text-decoration: none; color: inherit; }
 	border: 0;
 }
 
+/* Covers the drifting background, the entrance cascade in section 21 and the
+   floating decor. Every animated element's resting state IS its natural state,
+   so switching animation off leaves the page fully visible — nothing is left
+   stranded at opacity 0. */
 @media (prefers-reduced-motion: reduce) {
-	.bg__stars,
-	.blob { animation: none !important; }
-	* { transition-duration: 0.01ms !important; }
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }
 
 
@@ -912,7 +936,9 @@ a   { text-decoration: none; color: inherit; }
 	font-weight: 700;
 	line-height: 1;
 	letter-spacing: -0.005em;
-	color: var(--ink);
+	/* hollow neon tube: no fill, orange stroke */
+	color: transparent;
+	-webkit-text-stroke: 2px var(--accent);
 	white-space: nowrap;
 }
 
@@ -921,13 +947,13 @@ a   { text-decoration: none; color: inherit; }
 .pf-head__word:nth-child(3) { left: 52.2%; }
 .pf-head__word:nth-child(4) { left: 76.1%; }
 
+/* The active word is styled exactly like the other three — hollow outline,
+   same flicker, no underline of any kind. Nothing else in this stylesheet
+   sets a text-decoration on it; this states it outright so the intent is
+   explicit and no later rule reintroduces one.
+   (Positioning comes from .pf-head__word above.) */
 .pf-head__word--active {
-	color: var(--accent);
-	text-shadow: 0 0 40px var(--accent-glow);
-	text-decoration: underline;
-	text-decoration-color: var(--accent);
-	text-decoration-thickness: 4px;
-	text-underline-offset: 0.12em;
+	text-decoration: none;
 }
 
 .pf-intro {
@@ -2007,4 +2033,710 @@ a   { text-decoration: none; color: inherit; }
 	.ct-input          { font-size: 3.9vw; }
 	.ct-send           { font-size: 3.9vw; width: 100%; text-align: center; }
 	.ct-textarea       { min-height: 8rem; }
+}
+
+
+/* ==========================================================================
+   21. MOTION
+       Entrance cascade, hover lifts and idle float. Disabled wholesale by the
+       prefers-reduced-motion block in section 7.
+   ========================================================================== */
+
+:root {
+	/* easeOutQuint — long, soft settle for entrances */
+	--ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+	/* a touch of overshoot, so hovers feel physical rather than linear */
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* --- 21a. keyframes ------------------------------------------------------ */
+
+@keyframes fade-up {
+	from { opacity: 0; transform: translateY(30px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+	0%, 100% { transform: translateY(0); }
+	50%      { transform: translateY(-8px); }
+}
+
+
+/* --- 21b. entrance cascade -----------------------------------------------
+   `backwards` fill is deliberate. It holds the from-state through the delay,
+   then hands the element back to the normal cascade once the run finishes —
+   which is what lets .pf-card and .ts-card keep their :hover transforms.
+   `forwards` would pin transform to translateY(0) and the hover lift would
+   never fire.
+   ------------------------------------------------------------------------- */
+
+.hero,
+.portrait,
+.glass-panel,
+.about-intro,
+.about-hobbies,
+.pf-card,
+.sk-quad,
+.ts-card,
+.ct-grid {
+	animation: fade-up 0.85s var(--ease-out) backwards;
+}
+
+/* home */
+.hero          { animation-delay: 0.10s; }
+.glass-panel   { animation-delay: 0.20s; }
+.portrait      { animation-delay: 0.30s; }
+
+/* about */
+.about-intro   { animation-delay: 0.10s; }
+.about-hobbies { animation-delay: 0.25s; }
+
+/* portfolio — four columns sweep left to right */
+.pf-card:nth-child(1) { animation-delay: 0.10s; }
+.pf-card:nth-child(2) { animation-delay: 0.20s; }
+.pf-card:nth-child(3) { animation-delay: 0.30s; }
+.pf-card:nth-child(4) { animation-delay: 0.40s; }
+
+/* skills — around the cross, clockwise from the top left */
+.sk-quad--field { animation-delay: 0.10s; }
+.sk-quad--exp   { animation-delay: 0.20s; }
+.sk-quad--edu   { animation-delay: 0.30s; }
+.sk-quad--soft  { animation-delay: 0.40s; }
+
+/* testimonials */
+.ts-card--a { animation-delay: 0.10s; }
+.ts-card--b { animation-delay: 0.20s; }
+.ts-card--c { animation-delay: 0.30s; }
+
+/* contact */
+.ct-grid { animation-delay: 0.20s; }
+
+
+/* --- 21c. portfolio card hover ------------------------------------------- */
+.pf-card {
+	transition: transform 0.45s var(--ease-spring);
+}
+
+.pf-card:hover,
+.pf-card:focus-within {
+	transform: translateY(-8px);
+}
+
+/* the media box already clips, so the zoom stays inside the card edge */
+.pf-card__media img {
+	transition: transform 0.6s var(--ease-out), filter 0.45s var(--ease-out);
+}
+
+.pf-card:hover .pf-card__media img,
+.pf-card:focus-within .pf-card__media img {
+	transform: scale(1.05);
+}
+
+
+/* --- 21d. hobby + testimonial hover -------------------------------------- */
+.hobby {
+	transition: transform 0.4s var(--ease-spring),
+	            box-shadow 0.4s var(--ease-out);
+}
+
+.hobby:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 14px 46px rgba(0, 0, 0, 0.5),
+	            0 0 74px rgba(222, 84, 30, 0.55);
+}
+
+.ts-card {
+	transition: transform 0.45s var(--ease-spring),
+	            box-shadow 0.45s var(--ease-out);
+}
+
+.ts-card:hover,
+.ts-card:focus-within {
+	transform: translateY(-6px);
+	box-shadow: 0 34px 90px rgba(0, 0, 0, 0.65),
+	            0 0 66px rgba(222, 84, 30, 0.32);
+}
+
+
+/* --- 21e. idle float -----------------------------------------------------
+   Negative delays start each element part-way through the cycle, so they
+   drift out of step from the first frame instead of bobbing in unison.
+   ------------------------------------------------------------------------- */
+
+.outline-square,
+.about-badge,
+.ts-mark {
+	animation: float 5.5s ease-in-out infinite;
+}
+
+.outline-square { animation-delay: -0.8s; }
+.about-badge    { animation-delay: -2.2s; }
+
+.ts-mark--a { animation-delay:  0s;    }
+.ts-mark--b { animation-delay: -1.8s;  }
+.ts-mark--c { animation-delay: -3.4s;  }
+
+
+/* ==========================================================================
+   22. SIGNATURE MOTION
+       Flowing background arcs (site-wide), plus the spinning asterisks and
+       neon watermark on the home page. Also disabled by the
+       prefers-reduced-motion block in section 7.
+   ========================================================================== */
+
+/* --- 22a. flowing arcs ---------------------------------------------------
+   The dash period is 120 (40 on, 80 off) and the offset travels exactly one
+   period per cycle, so the loop is seamless — any other distance would jump
+   at the wrap. non-scaling-stroke keeps both the width and the dash lengths
+   in screen pixels despite the viewBox being stretched.
+   ------------------------------------------------------------------------- */
+
+@keyframes arc-flow {
+	from { stroke-dashoffset: 0; }
+	to   { stroke-dashoffset: -120; }
+}
+
+.bg__arcs path {
+	fill: none;
+	stroke: var(--accent);
+	stroke-width: 4;
+	stroke-linecap: round;
+	vector-effect: non-scaling-stroke;
+	stroke-dasharray: 40 80;
+	animation: arc-flow 3.2s linear infinite;
+}
+
+/* three different speeds, so they never travel in lockstep */
+.bg__arcs path:nth-child(1) { animation-duration: 3.2s; }
+.bg__arcs path:nth-child(2) { animation-duration: 4.6s; animation-delay: -1.1s; }
+.bg__arcs path:nth-child(3) { animation-duration: 5.8s; animation-delay: -2.7s; }
+
+
+/* --- 22b. staggered spinning asterisks ----------------------------------
+   5s loop: one second of spin, four seconds of rest. The small one is
+   delayed by exactly that spin, so it starts the instant the big one stops.
+   fill-box origin means each rotates about its own centre without having to
+   hard-code coordinates.
+   ------------------------------------------------------------------------- */
+
+@keyframes asterisk-spin {
+	0% {
+		transform: rotate(0deg);
+		animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+	}
+	20%, 100% { transform: rotate(360deg); }   /* 20% of 5s = 1s of spin */
+}
+
+.asterisk-big,
+.asterisk-small {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: asterisk-spin 5s linear infinite;
+}
+
+.asterisk-small { animation-delay: 1s; }
+
+
+/* --- 22c. neon flicker ---------------------------------------------------
+   The watermark is stroke-only with a transparent fill; the flicker lights it
+   by swapping in an accent fill and a glow. steps(1) gives hard on/off cuts
+   rather than fades, which is what reads as a failing tube.
+   ------------------------------------------------------------------------- */
+
+@keyframes neon-flicker {
+	0%,  100% { color: transparent;    text-shadow: none; }
+
+	4%        { color: var(--accent);  text-shadow: 0 0 14px var(--accent-glow),
+	                                                0 0 36px var(--accent-glow); }
+	6%        { color: transparent;    text-shadow: none; }
+	9%        { color: var(--accent);  text-shadow: 0 0 14px var(--accent-glow),
+	                                                0 0 36px var(--accent-glow); }
+	15%       { color: transparent;    text-shadow: none; }
+
+	47%       { color: var(--accent);  text-shadow: 0 0 20px var(--accent-glow),
+	                                                0 0 48px var(--accent-glow); }
+	51%       { color: transparent;    text-shadow: none; }
+	53%       { color: var(--accent);  text-shadow: 0 0 14px var(--accent-glow),
+	                                                0 0 36px var(--accent-glow); }
+	58%       { color: transparent;    text-shadow: none; }
+}
+
+.watermark div {
+	animation: neon-flicker 7s steps(1, end) infinite;
+}
+
+/* different periods and offsets, so the three lines never fire together */
+.watermark div:nth-child(1) { animation-duration: 6.5s; animation-delay:  0s;    }
+.watermark div:nth-child(2) { animation-duration: 8.2s; animation-delay: -2.4s;  }
+.watermark div:nth-child(3) { animation-duration: 7.4s; animation-delay: -4.1s;  }
+
+
+/* --- 22d. tilt surface ---------------------------------------------------
+   Nothing to declare here. The tilt is set inline by the script on
+   index.html, which also sets will-change itself — putting it in this shared
+   rule would pin a full-viewport compositor layer on all seven pages when
+   only one of them tilts. The rail is a sibling of .stage, never a child,
+   so it is untouched either way.
+   ------------------------------------------------------------------------- */
+
+
+/* ==========================================================================
+   23. ABOUT PAGE MOTION
+       Word-by-word decode, interactive hobby icons, and the drifting collage.
+       Also disabled by the prefers-reduced-motion block in section 7.
+   ========================================================================== */
+
+/* --- 23a. decode reveal --------------------------------------------------
+   The script wraps each word in .word and sets its own animation-delay.
+   `backwards` fill matters twice over: it holds the blur through the delay,
+   and it means switching animation off leaves every word plainly visible
+   instead of stranded at opacity 0.
+   ------------------------------------------------------------------------- */
+
+@keyframes decode-word {
+	from { opacity: 0; filter: blur(8px); transform: translateY(5px); }
+	to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
+}
+
+.about-text .word {
+	display: inline-block;
+	animation: decode-word 0.55s var(--ease-out) backwards;
+}
+
+
+/* --- 23b. movies — the clap ---------------------------------------------
+   CSS restates the resting -8deg because a CSS transform replaces the SVG
+   transform attribute outright rather than composing with it. view-box lets
+   transform-origin use the same (50,28) pivot the attribute names.
+   ------------------------------------------------------------------------- */
+
+@keyframes clap {
+	0%   { transform: rotate(-8deg); }
+	30%  { transform: rotate(0deg); }      /* snap shut */
+	45%  { transform: rotate(-1deg); }     /* bounce */
+	60%  { transform: rotate(0deg); }
+	100% { transform: rotate(-8deg); }     /* lift back open */
+}
+
+.clap-arm {
+	transform-box: view-box;
+	transform-origin: 50px 28px;
+	transform: rotate(-8deg);
+}
+
+.hobby--movies:hover .clap-arm,
+.hobby--movies:focus-within .clap-arm {
+	animation: clap 0.7s cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+
+/* --- 23c. music — wiggle + floating note --------------------------------- */
+
+@keyframes wiggle {
+	0%, 100% { transform: rotate(0deg); }
+	25%      { transform: rotate(-9deg); }
+	75%      { transform: rotate(9deg); }
+}
+
+.note {
+	transform-box: view-box;
+	transform-origin: 40px 72px;    /* pivot on the notehead */
+}
+
+.hobby--music:hover .note,
+.hobby--music:focus-within .note {
+	animation: wiggle 0.6s ease-in-out infinite;
+}
+
+@keyframes float-up {
+	from { opacity: 1; transform: translate(-50%, 0)     scale(0.8); }
+	to   { opacity: 0; transform: translate(-50%, -64px) scale(1.25); }
+}
+
+.hobby--music:hover::before,
+.hobby--music:focus-within::before {
+	content: "\266B";               /* ♫ */
+	position: absolute;
+	left: 50%;
+	top: 12%;
+	font-size: 1.9em;
+	line-height: 1;
+	color: #000;
+	pointer-events: none;
+	animation: float-up 1.1s ease-out forwards;
+}
+
+
+/* --- 23d. sim racing — rippling flag ------------------------------------- */
+
+@keyframes wave-flag {
+	0%, 100% { transform: skewY(0deg)    scaleX(1); }
+	25%      { transform: skewY(-3.5deg) scaleX(0.95); }
+	50%      { transform: skewY(0deg)    scaleX(1.03); }
+	75%      { transform: skewY(3.5deg)  scaleX(0.95); }
+}
+
+.flag {
+	transform-box: fill-box;
+	transform-origin: left center;  /* anchored at the pole */
+}
+
+.hobby--racing:hover .flag,
+.hobby--racing:focus-within .flag {
+	animation: wave-flag 0.9s ease-in-out infinite;
+}
+
+
+/* --- 23e. drifting collage ----------------------------------------------
+   One keyframe, but each element supplies its own vector through custom
+   properties — so they genuinely travel different paths rather than all
+   sliding the same way at different speeds. Paired with the varied durations
+   and delays below, that is what reads as parallax depth.
+   ------------------------------------------------------------------------- */
+
+@keyframes liquid-drift {
+	from { transform: translate(0, 0) rotate(0deg); }
+	to   { transform: translate(var(--dx), var(--dy)) rotate(var(--dr)); }
+}
+
+.about-panel,
+.about-frame,
+.about-photo {
+	animation: liquid-drift 8s ease-in-out infinite alternate;
+}
+
+.about-panel {
+	--dx: 11px;  --dy: -13px; --dr: 2deg;
+	animation-duration: 9.5s;
+	animation-delay: -2.1s;
+}
+
+.about-frame {
+	--dx: -14px; --dy: 10px;  --dr: -2.6deg;
+	animation-duration: 7.4s;
+	animation-delay: -4.3s;
+}
+
+.about-photo {
+	--dx: 13px;  --dy: -15px; --dr: 3deg;
+	animation-duration: 8.6s;
+	animation-delay: -1.2s;
+}
+
+/* Must sit after the rules above to win the cascade. On small screens the
+   collage is unstacked and the photo sits in normal flow, where drifting it
+   just wobbles the column — the panel and frame are display:none there. */
+@media (max-width: 860px) {
+	.about-photo { animation: none; }
+}
+
+
+/* ==========================================================================
+   24. PORTFOLIO PAGE MOTION + LINKED CARDS
+   ========================================================================== */
+
+/* --- 24a. neon flicker on the header band -------------------------------
+   Now that the words are hollow with an orange stroke, the flicker can sit
+   on the word itself — the earlier ::after text overlay existed only to stop
+   a solid word being blanked, and is gone. That also frees ::after for the
+   tube underline in 24c.
+
+   This is a separate keyframe from neon-flicker on purpose. That one swaps
+   `color` transparent → accent, which the DESIGN watermark on the home page
+   relies on to fill in; editing it in place would have changed index.html
+   too. Here the stroke is already orange, so only the glow needs to pulse.
+   ------------------------------------------------------------------------- */
+
+@keyframes neon-tube-flicker {
+	0%,  100% { text-shadow: none; }
+
+	4%        { text-shadow: 0 0  8px var(--accent),
+	                         0 0 22px var(--accent-glow),
+	                         0 0 48px var(--accent-glow); }
+	6%        { text-shadow: none; }
+	9%        { text-shadow: 0 0  8px var(--accent),
+	                         0 0 22px var(--accent-glow),
+	                         0 0 48px var(--accent-glow); }
+	15%       { text-shadow: none; }
+
+	47%       { text-shadow: 0 0 10px var(--accent),
+	                         0 0 28px var(--accent-glow),
+	                         0 0 60px var(--accent-glow); }
+	51%       { text-shadow: none; }
+	53%       { text-shadow: 0 0  8px var(--accent),
+	                         0 0 22px var(--accent-glow),
+	                         0 0 48px var(--accent-glow); }
+	58%       { text-shadow: none; }
+}
+
+.pf-head__word {
+	animation: neon-tube-flicker 6.8s steps(1, end) infinite;
+}
+
+/* out of sync, same idea as the DESIGN watermark */
+.pf-head__word:nth-child(1) { animation-duration: 6.8s; animation-delay: -0.6s; }
+.pf-head__word:nth-child(2) { animation-duration: 8.6s; animation-delay: -3.2s; }
+.pf-head__word:nth-child(3) { animation-duration: 7.3s; animation-delay: -5.1s; }
+.pf-head__word:nth-child(4) { animation-duration: 9.4s; animation-delay: -1.9s; }
+
+
+/* No ::after tube here any more — the active word carries no underline at
+   all, only the hollow outline and the flicker it shares with the other
+   three. Deliberately left blank so it is clear nothing was overlooked. */
+
+
+/* --- 24b. cards as links -------------------------------------------------
+   The cards are <a> now. Everything else — the flex basis, the divider
+   pseudo, the lift and the image zoom — keys off .pf-card and is unchanged.
+   ------------------------------------------------------------------------- */
+
+.pf-card {
+	display: block;
+	text-decoration: none;
+	color: var(--ink);
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* keyboard users get the same lift via :focus-within (already defined in
+   section 21) plus a visible ring */
+.pf-card:focus-visible {
+	outline: 3px solid var(--accent);
+	outline-offset: 5px;
+}
+
+
+/* ==========================================================================
+   25. SKILLS PAGE MOTION + INTERACTION
+       Reuses neon-tube-flicker from section 24a — the glow-only variant.
+       neon-flicker itself drives `color` to transparent for most of its
+       cycle, which suits the stroke-only DESIGN watermark but would blank
+       solid text; both targets here stay readable throughout.
+   ========================================================================== */
+
+/* --- 25a. flickering SKILLS banner ---------------------------------------
+   The letters stay solid white so the centrepiece never drops out; only the
+   glow pulses. Six different periods and negative offsets, so no two letters
+   are ever in step.
+   ------------------------------------------------------------------------- */
+
+.sk-banner span {
+	animation: neon-tube-flicker 7s steps(1, end) infinite;
+}
+
+.sk-banner span:nth-child(1) { animation-duration: 6.4s; animation-delay: -0.3s; }
+.sk-banner span:nth-child(2) { animation-duration: 8.1s; animation-delay: -2.7s; }
+.sk-banner span:nth-child(3) { animation-duration: 7.2s; animation-delay: -4.9s; }
+.sk-banner span:nth-child(4) { animation-duration: 9.3s; animation-delay: -1.4s; }
+.sk-banner span:nth-child(5) { animation-duration: 6.9s; animation-delay: -5.8s; }
+.sk-banner span:nth-child(6) { animation-duration: 8.7s; animation-delay: -3.5s; }
+
+
+/* --- 25b. outlined quadrant headings ------------------------------------- */
+.sk-quad__head {
+	color: transparent;
+	-webkit-text-stroke: 1.5px var(--accent);
+	animation: neon-tube-flicker 7.6s steps(1, end) infinite;
+}
+
+.sk-quad--field .sk-quad__head { animation-duration: 6.6s; animation-delay: -1.2s; }
+.sk-quad--exp   .sk-quad__head { animation-duration: 8.4s; animation-delay: -3.9s; }
+.sk-quad--edu   .sk-quad__head { animation-duration: 7.1s; animation-delay: -5.5s; }
+.sk-quad--soft  .sk-quad__head { animation-duration: 9.1s; animation-delay: -2.3s; }
+
+/* the rule beneath each heading stays solid — it is what anchors the
+   hollow lettering above it */
+.sk-quad__head::after {
+	box-shadow: 0 0 12px var(--accent-glow);
+}
+
+
+/* --- 25c. interactive list entries --------------------------------------- */
+.sk-list li {
+	transition: transform 0.28s var(--ease-spring),
+	            text-shadow 0.28s var(--ease-out);
+	cursor: default;
+}
+
+.sk-list li::before {
+	transition: transform 0.28s var(--ease-spring),
+	            box-shadow 0.28s var(--ease-out);
+}
+
+.sk-list li:hover {
+	transform: translateX(4px);
+	text-shadow: 0 0 18px rgba(255, 255, 255, 0.45);
+}
+
+.sk-list li:hover::before {
+	transform: translateY(-0.1em) scale(1.45);
+	box-shadow: 0 0 12px var(--accent);
+}
+
+.sk-entry {
+	transition: transform 0.28s var(--ease-spring),
+	            border-color 0.28s var(--ease-out);
+}
+
+.sk-entry:hover {
+	transform: translateX(4px);
+	border-left-color: var(--accent);
+}
+
+.sk-entry:hover .sk-entry__org {
+	color: var(--ink);
+	text-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
+}
+
+.sk-entry__org {
+	transition: text-shadow 0.28s var(--ease-out);
+}
+
+.sk-entry:hover .sk-entry__label {
+	text-shadow: 0 0 14px var(--accent-glow);
+}
+
+.sk-entry__label {
+	transition: text-shadow 0.28s var(--ease-out);
+}
+
+
+/* --- 25d. software icon micro-motion ------------------------------------- */
+.sk-soft-grid img {
+	transition: transform 0.32s var(--ease-spring),
+	            filter 0.32s var(--ease-out);
+}
+
+.sk-soft-grid li:hover img {
+	transform: translateY(-4px) scale(1.05);
+	filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.65))
+	        drop-shadow(0 0 18px var(--accent-glow));
+}
+
+
+/* ==========================================================================
+   26. RESUME PAGE MOTION
+   ========================================================================== */
+
+/* --- 26a. flickering RESUME title ---------------------------------------
+   neon-flicker itself works here, unlike on the portfolio headers or the
+   SKILLS banner: the title is already stroke-only with a transparent fill,
+   so the keyframe's `color: transparent` phase leaves a white outline rather
+   than blanking it. Lit, it floods accent behind that outline.
+
+   The accent echo behind the title flickers on its own clock, so the two
+   layers drift in and out of step instead of pulsing as one block.
+   ------------------------------------------------------------------------- */
+
+.rs-title {
+	animation: neon-flicker 7.2s steps(1, end) infinite;
+}
+
+.rs-title::before {
+	animation: neon-flicker 8.9s steps(1, end) infinite;
+	animation-delay: -3.6s;
+}
+
+
+/* --- 26b. flowing hatch bands -------------------------------------------
+   The stripes repeat every 22px measured along the 114deg gradient line,
+   which is 22 / sin(114deg) = 24.083px measured horizontally. Travelling
+   exactly that distance per cycle is what makes the loop seamless — any
+   other value visibly jumps at the wrap.
+   ------------------------------------------------------------------------- */
+
+@keyframes band-flow {
+	from { background-position: 0 0; }
+	to   { background-position: 24.083px 0; }
+}
+
+.rs-band {
+	animation: band-flow 3.8s linear infinite;
+}
+
+/* adjacent bands run opposite ways, so the block reads as woven rather than
+   as three stripes sliding the same direction */
+.rs-band:nth-child(1) { animation-duration: 3.4s; }
+.rs-band:nth-child(2) { animation-duration: 4.8s; animation-direction: reverse; }
+.rs-band:nth-child(3) { animation-duration: 4.1s; }
+
+
+/* --- 26c. download button polish ---------------------------------------- */
+.rs-download {
+	/* tighter than the old .25s so the lift feels crisp rather than lazy */
+	transition: background-color 0.18s var(--ease-out),
+	            transform 0.18s var(--ease-spring),
+	            box-shadow 0.18s var(--ease-out);
+}
+
+.rs-download:hover,
+.rs-download:focus-visible {
+	background: rgba(30, 12, 6, 0.92);
+	transform: translate(-2px, -2px);
+	box-shadow: 10px 12px 0 var(--accent);
+}
+
+/* pressed: the button drops into its own shadow. The near-zero duration is
+   deliberate — a press has to register on the frame it happens, not ease in. */
+.rs-download:active {
+	transform: translate(3px, 4px);
+	box-shadow: 2px 3px 0 var(--accent);
+	transition-duration: 0.04s;
+}
+
+/* the hover rule clears the outline, so keyboard users get an explicit ring
+   back rather than no focus indicator at all */
+.rs-download:focus-visible {
+	outline: 3px solid var(--ink);
+	outline-offset: 5px;
+}
+
+
+/* ==========================================================================
+   27. TESTIMONIALS PAGE MOTION
+   ========================================================================== */
+
+/* --- 27a. flickering labels ---------------------------------------------
+   Glow-only, via neon-tube-flicker. neon-flicker itself drives `color` to
+   transparent for most of its cycle, which works on stroke-only text like
+   the DESIGN watermark but would blank these — all three labels are solid
+   fills (white on a and b, accent on c). Three periods, three offsets, so
+   they never pulse together.
+   ------------------------------------------------------------------------- */
+
+.ts-label {
+	animation: neon-tube-flicker 7.5s steps(1, end) infinite;
+}
+
+.ts-label--a { animation-duration: 6.7s; animation-delay: -1.9s; }
+.ts-label--b { animation-duration: 8.3s; animation-delay: -4.6s; }
+.ts-label--c { animation-duration: 9.2s; animation-delay: -0.8s; }
+
+
+/* --- 27b. card hover + panel parallax -----------------------------------
+   The lift and shadow already live in section 21d. What is new is the
+   frosted panel behind each card drifting with it.
+
+   :has() is doing the work because .ts-panel is a PRECEDING sibling of its
+   card — no combinator selects backwards, and wrapping the pair is no help
+   either, since every child is absolutely positioned so the wrapper would
+   collapse to zero height and never receive the hover. Where :has() is
+   unsupported the panel simply stays put; the card still lifts.
+   ------------------------------------------------------------------------- */
+
+.ts-panel {
+	transition: transform 0.45s var(--ease-spring),
+	            background-color 0.45s var(--ease-out);
+}
+
+/* the panel travels less than the card it sits behind — the difference in
+   distance is what reads as depth rather than as two things sliding */
+.stage:has(.ts-card--a:hover)         .ts-panel--a,
+.stage:has(.ts-card--a:focus-within)  .ts-panel--a,
+.stage:has(.ts-card--b:hover)         .ts-panel--b,
+.stage:has(.ts-card--b:focus-within)  .ts-panel--b,
+.stage:has(.ts-card--c:hover)         .ts-panel--c,
+.stage:has(.ts-card--c:focus-within)  .ts-panel--c {
+	transform: translate(-5px, -2px) scale(1.015);
+	background: rgba(255, 255, 255, 0.16);
 }

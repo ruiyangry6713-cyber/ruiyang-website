@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="view-transition" content="same-origin">
 <title>Rui Yang — Portfolio Design</title>
 <meta name="description" content="Portfolio of Rui Yang — 2D animation, motion graphics, illustration and web design.">
 <link rel="stylesheet" href="css/style.css">
@@ -64,17 +65,26 @@
 
 		<!-- accent square with asterisk mark -->
 		<div class="deco-square" aria-hidden="true">
+			<!-- Each asterisk is wrapped: the outer <g> keeps its placement as an
+			     SVG transform attribute, the inner <g> carries only the CSS spin.
+			     They must stay separate — a CSS transform replaces the attribute
+			     outright, which would drop the translate and stack both
+			     asterisks on the origin. -->
 			<svg class="deco-square__mark" viewBox="0 0 170 130">
 				<g fill="#000">
 					<g transform="translate(58,66)">
-						<rect x="-9" y="-52" width="18" height="104" rx="4"/>
-						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
-						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+						<g class="asterisk-big">
+							<rect x="-9" y="-52" width="18" height="104" rx="4"/>
+							<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
+							<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+						</g>
 					</g>
 					<g transform="translate(133,34) scale(0.46)">
-						<rect x="-9" y="-52" width="18" height="104" rx="4"/>
-						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
-						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+						<g class="asterisk-small">
+							<rect x="-9" y="-52" width="18" height="104" rx="4"/>
+							<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
+							<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+						</g>
 					</g>
 				</g>
 			</svg>
@@ -114,6 +124,9 @@
 	</main>
 
 </div>
+
+
+<script src="js/tilt.js"></script>
 
 </body>
 </html>
