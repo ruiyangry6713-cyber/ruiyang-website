@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rui Yang — Portfolio Design</title>
+<meta name="description" content="Portfolio of Rui Yang — 2D animation, motion graphics, illustration and web design.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ==========================================================
+     BACKGROUND ATMOSPHERE — stars, drifting blobs, accent arcs
+     ========================================================== -->
+<div class="bg" aria-hidden="true">
+	<div class="bg__stars"></div>
+
+	<div class="blob blob--pale"></div>
+	<div class="blob blob--accent"></div>
+	<div class="blob blob--soft"></div>
+
+	<svg class="bg__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+		<path d="M 120 -60 C 470 190, 560 520, 300 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 60 -60 C 420 200, 505 545, 235 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 1500 300 C 1180 520, 1120 760, 1240 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+	</svg>
+</div>
+
+
+<div class="layout">
+
+	<!-- ==========================================================
+	     LEFT NAVIGATION RAIL
+	     ========================================================== -->
+	<aside class="rail">
+		<div class="rail__nav rail__nav--home">
+			<nav aria-label="Main">
+				<ul class="nav">
+					<li class="nav__item"><a class="nav__link nav__link--active" href="index.html" aria-current="page">HOME</a></li>
+					<li class="nav__item"><a class="nav__link" href="about.html">ABOUT ME</a></li>
+					<li class="nav__item"><a class="nav__link" href="portfolio.html">PORTFOLIO</a></li>
+					<li class="nav__item"><a class="nav__link" href="skills.html">SKILLS</a></li>
+					<li class="nav__item"><a class="nav__link" href="resume.html">RESUME</a></li>
+					<li class="nav__item"><a class="nav__link" href="testimonials.html">TESTIMONIAL</a></li>
+					<li class="nav__item"><a class="nav__link" href="contact.html">CONTACT ME</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+
+	<!-- ==========================================================
+	     STAGE — hero collage (mirrors Slide 1)
+	     ========================================================== -->
+	<main class="stage">
+
+		<!-- outlined DESIGN watermark -->
+		<div class="watermark" aria-hidden="true">
+			<div>DESIGN</div>
+			<div>DESIGN</div>
+			<div>DESIGN</div>
+		</div>
+
+		<!-- accent square with asterisk mark -->
+		<div class="deco-square" aria-hidden="true">
+			<svg class="deco-square__mark" viewBox="0 0 170 130">
+				<g fill="#000">
+					<g transform="translate(58,66)">
+						<rect x="-9" y="-52" width="18" height="104" rx="4"/>
+						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
+						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+					</g>
+					<g transform="translate(133,34) scale(0.46)">
+						<rect x="-9" y="-52" width="18" height="104" rx="4"/>
+						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(60)"/>
+						<rect x="-9" y="-52" width="18" height="104" rx="4" transform="rotate(120)"/>
+					</g>
+				</g>
+			</svg>
+		</div>
+
+		<!-- frosted glass panel -->
+		<div class="glass-panel" aria-hidden="true"></div>
+
+		<!-- portrait -->
+		<img class="portrait"
+		     src="assets/home/Ruiyang%20Home%20Page.png"
+		     alt="Portrait of Rui Yang">
+
+		<!-- white outlined square -->
+		<div class="outline-square" aria-hidden="true"></div>
+
+		<!-- hero type -->
+		<div class="hero">
+			<h1>
+				<span class="hero__kicker">PORTFOLIO</span>
+				<span class="hero__title"><span class="accent">D</span>ESIGN</span>
+			</h1>
+
+			<div class="hero__rule" aria-hidden="true">
+				<span class="hero__dot"></span>
+				<span class="hero__dot"></span>
+				<span class="hero__line"></span>
+				<span class="hero__dot"></span>
+			</div>
+		</div>
+
+		<!-- name bar -->
+		<div class="name-bar">
+			<p class="name-bar__text">RUI YANG</p>
+		</div>
+
+	</main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Me — Rui Yang</title>
+<meta name="description" content="About Rui Yang — 2D animation and web design, plus a few things away from the screen.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ==========================================================
+     BACKGROUND ATMOSPHERE — stars, drifting blobs, accent arcs
+     ========================================================== -->
+<div class="bg" aria-hidden="true">
+	<div class="bg__stars"></div>
+
+	<div class="blob blob--pale"></div>
+	<div class="blob blob--accent"></div>
+	<div class="blob blob--soft"></div>
+
+	<svg class="bg__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+		<path d="M 120 -60 C 470 190, 560 520, 300 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 60 -60 C 420 200, 505 545, 235 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 1500 300 C 1180 520, 1120 760, 1240 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+	</svg>
+</div>
+
+
+<div class="layout">
+
+	<!-- ==========================================================
+	     LEFT NAVIGATION RAIL
+	     ========================================================== -->
+	<aside class="rail">
+		<div class="rail__nav rail__nav--about">
+			<nav aria-label="Main">
+				<ul class="nav">
+					<li class="nav__item"><a class="nav__link" href="index.html">HOME</a></li>
+					<li class="nav__item"><a class="nav__link nav__link--active" href="about.html" aria-current="page">ABOUT ME</a></li>
+					<li class="nav__item"><a class="nav__link" href="portfolio.html">PORTFOLIO</a></li>
+					<li class="nav__item"><a class="nav__link" href="skills.html">SKILLS</a></li>
+					<li class="nav__item"><a class="nav__link" href="resume.html">RESUME</a></li>
+					<li class="nav__item"><a class="nav__link" href="testimonials.html">TESTIMONIAL</a></li>
+					<li class="nav__item"><a class="nav__link" href="contact.html">CONTACT ME</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+
+	<!-- ==========================================================
+	     STAGE — two-column about layout (mirrors Slide 2)
+	     ========================================================== -->
+	<main class="stage">
+
+		<!-- section title (right column, top) -->
+		<h1 class="about-title" data-text="About Me">About <span class="accent">Me</span></h1>
+
+		<!-- left column — intro -->
+		<div class="about-intro">
+			<h2 class="about-hello">Hello&rdquo;</h2>
+			<p class="about-text">I&rsquo;m Rui Yang, I build cool things on screens. From 2D animation to web design, I love turning complex ideas into clean, scroll-stopping visuals. When I&rsquo;m stepping away from the digital canvas, I&rsquo;m usually hunting for the best lap times in a racing simulator, getting lost in a great movie, or blasting my favorite music.</p>
+		</div>
+
+		<!-- left column — hobbies -->
+		<section class="about-hobbies">
+			<h2 class="about-subhead">Hobbies</h2>
+
+			<ul class="hobby-row">
+
+				<li class="hobby">
+					<svg class="hobby__icon" viewBox="0 0 100 100" aria-hidden="true">
+						<!-- clapper board -->
+						<rect x="14" y="42" width="72" height="44" rx="2"/>
+						<g class="cut">
+							<rect x="14" y="56" width="72" height="2.5"/>
+							<rect x="14" y="70" width="72" height="2.5"/>
+							<rect x="37" y="42" width="2.5" height="44"/>
+							<rect x="61" y="42" width="2.5" height="44"/>
+						</g>
+						<g transform="rotate(-8 50 28)">
+							<rect x="12" y="17" width="76" height="20" rx="2"/>
+							<g class="cut">
+								<polygon points="22,17 30,17 22,37 14,37"/>
+								<polygon points="40,17 48,17 40,37 32,37"/>
+								<polygon points="58,17 66,17 58,37 50,37"/>
+								<polygon points="76,17 84,17 76,37 68,37"/>
+							</g>
+						</g>
+					</svg>
+					<span class="hobby__label">Movies</span>
+				</li>
+
+				<li class="hobby">
+					<svg class="hobby__icon" viewBox="0 0 100 100" aria-hidden="true">
+						<!-- eighth note -->
+						<circle cx="40" cy="72" r="18"/>
+						<rect x="52" y="16" width="6" height="56"/>
+						<rect x="58" y="16" width="20" height="22"/>
+					</svg>
+					<span class="hobby__label">Music</span>
+				</li>
+
+				<li class="hobby">
+					<svg class="hobby__icon" viewBox="0 0 100 100" aria-hidden="true">
+						<!-- checkered flag -->
+						<polygon points="20,14 26,14 22,88 16,88"/>
+						<g transform="translate(26,18) rotate(-4)">
+							<rect width="56" height="42"/>
+							<g class="cut">
+								<rect x="0"  y="0"  width="14" height="14"/>
+								<rect x="28" y="0"  width="14" height="14"/>
+								<rect x="14" y="14" width="14" height="14"/>
+								<rect x="42" y="14" width="14" height="14"/>
+								<rect x="0"  y="28" width="14" height="14"/>
+								<rect x="28" y="28" width="14" height="14"/>
+							</g>
+						</g>
+					</svg>
+					<span class="hobby__label">Sim Racing</span>
+				</li>
+
+			</ul>
+		</section>
+
+		<!-- right column — portrait collage -->
+		<div class="about-panel" aria-hidden="true"></div>
+		<div class="about-frame" aria-hidden="true"></div>
+
+		<img class="about-photo"
+		     src="assets/about/Ruiyang%20About%20Me%20Page.png"
+		     alt="Rui Yang holding his dog">
+
+		<div class="about-badge" aria-hidden="true">
+			<span class="about-badge__mark">?</span>
+		</div>
+
+	</main>
+
+</div>
+
+</body>
+</html>

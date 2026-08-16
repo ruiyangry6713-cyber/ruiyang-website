@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Me — Rui Yang</title>
+<meta name="description" content="Get in touch with Rui Yang — phone, email, or send a message directly.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ==========================================================
+     BACKGROUND ATMOSPHERE — stars, drifting blobs, accent arcs
+     ========================================================== -->
+<div class="bg" aria-hidden="true">
+	<div class="bg__stars"></div>
+
+	<div class="blob blob--pale"></div>
+	<div class="blob blob--accent"></div>
+	<div class="blob blob--soft"></div>
+
+	<svg class="bg__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+		<path d="M 120 -60 C 470 190, 560 520, 300 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 60 -60 C 420 200, 505 545, 235 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 1500 300 C 1180 520, 1120 760, 1240 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+	</svg>
+</div>
+
+
+<div class="layout">
+
+	<!-- ==========================================================
+	     LEFT NAVIGATION RAIL
+	     ========================================================== -->
+	<aside class="rail">
+		<div class="rail__nav rail__nav--contact">
+			<nav aria-label="Main">
+				<ul class="nav">
+					<li class="nav__item"><a class="nav__link" href="index.html">HOME</a></li>
+					<li class="nav__item"><a class="nav__link" href="about.html">ABOUT ME</a></li>
+					<li class="nav__item"><a class="nav__link" href="portfolio.html">PORTFOLIO</a></li>
+					<li class="nav__item"><a class="nav__link" href="skills.html">SKILLS</a></li>
+					<li class="nav__item"><a class="nav__link" href="resume.html">RESUME</a></li>
+					<li class="nav__item"><a class="nav__link" href="testimonials.html">TESTIMONIAL</a></li>
+					<li class="nav__item"><a class="nav__link nav__link--active" href="contact.html" aria-current="page">CONTACT ME</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+
+	<!-- ==========================================================
+	     STAGE — split card: details on the left, form on the right
+	     ========================================================== -->
+	<main class="stage">
+		<div class="ct-shell">
+
+			<h1 class="ct-title">CONTACT&rdquo;</h1>
+			<p class="ct-tagline">Got a project in mind, or just want to say hello? Drop me a line and I&rsquo;ll get back to you.</p>
+
+			<div class="ct-grid">
+
+				<!-- left: details -->
+				<section class="ct-info">
+					<h2 class="ct-subhead">Reach me</h2>
+
+					<ul class="ct-details">
+						<li class="ct-detail">
+							<span class="ct-detail__dot" aria-hidden="true"></span>
+							<a class="ct-detail__link" href="tel:0175191229">TEL : 0175191229</a>
+						</li>
+						<li class="ct-detail">
+							<span class="ct-detail__dot" aria-hidden="true"></span>
+							<a class="ct-detail__link" href="mailto:ruiyangry6713@gmail.com">EMAIL: RUIYANGRY6713@GMAIL.COM</a>
+						</li>
+					</ul>
+				</section>
+
+				<!-- right: form -->
+				<section class="ct-form-wrap">
+					<h2 class="ct-subhead">Send a message</h2>
+
+					<form class="ct-form"
+					      action="mailto:ruiyangry6713@gmail.com"
+					      method="post"
+					      enctype="text/plain">
+
+						<div class="ct-field">
+							<label class="ct-label" for="ct-name">Name</label>
+							<input class="ct-input" type="text" id="ct-name" name="Name"
+							       autocomplete="name" placeholder="Your name" required>
+						</div>
+
+						<div class="ct-field">
+							<label class="ct-label" for="ct-email">Email</label>
+							<input class="ct-input" type="email" id="ct-email" name="Email"
+							       autocomplete="email" placeholder="you@example.com" required>
+						</div>
+
+						<div class="ct-field">
+							<label class="ct-label" for="ct-message">Message</label>
+							<textarea class="ct-input ct-textarea" id="ct-message" name="Message"
+							          rows="5" placeholder="Tell me about your project&hellip;" required></textarea>
+						</div>
+
+						<button class="ct-send" type="submit">SEND</button>
+					</form>
+				</section>
+
+			</div>
+		</div>
+	</main>
+
+</div>
+
+</body>
+</html>

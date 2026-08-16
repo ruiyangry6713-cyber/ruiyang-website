@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Rui Yang</title>
+<meta name="description" content="Portfolio of Rui Yang — illustration, photography, animation and motion graphic work.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ==========================================================
+     BACKGROUND ATMOSPHERE — stars, drifting blobs, accent arcs
+     ========================================================== -->
+<div class="bg" aria-hidden="true">
+	<div class="bg__stars"></div>
+
+	<div class="blob blob--pale"></div>
+	<div class="blob blob--accent"></div>
+	<div class="blob blob--soft"></div>
+
+	<svg class="bg__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+		<path d="M 120 -60 C 470 190, 560 520, 300 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 60 -60 C 420 200, 505 545, 235 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 1500 300 C 1180 520, 1120 760, 1240 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+	</svg>
+</div>
+
+
+<div class="layout">
+
+	<!-- ==========================================================
+	     LEFT NAVIGATION RAIL
+	     ========================================================== -->
+	<aside class="rail">
+		<div class="rail__nav rail__nav--portfolio">
+			<nav aria-label="Main">
+				<ul class="nav">
+					<li class="nav__item"><a class="nav__link" href="index.html">HOME</a></li>
+					<li class="nav__item"><a class="nav__link" href="about.html">ABOUT ME</a></li>
+					<li class="nav__item"><a class="nav__link nav__link--active" href="portfolio.html" aria-current="page">PORTFOLIO</a></li>
+					<li class="nav__item"><a class="nav__link" href="skills.html">SKILLS</a></li>
+					<li class="nav__item"><a class="nav__link" href="resume.html">RESUME</a></li>
+					<li class="nav__item"><a class="nav__link" href="testimonials.html">TESTIMONIAL</a></li>
+					<li class="nav__item"><a class="nav__link" href="contact.html">CONTACT ME</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+
+	<!-- ==========================================================
+	     STAGE — four vertical portfolio columns (mirrors Slide 3)
+	     ========================================================== -->
+	<main class="stage">
+
+		<!-- repeated header band, one word per column -->
+		<h1 class="pf-head">
+			<span class="pf-head__word pf-head__word--active">PORTFOLIO</span>
+			<span class="pf-head__word" aria-hidden="true">PORTFOLIO</span>
+			<span class="pf-head__word" aria-hidden="true">PORTFOLIO</span>
+			<span class="pf-head__word" aria-hidden="true">PORTFOLIO</span>
+		</h1>
+
+		<p class="pf-intro">Four disciplines, one way of working &mdash; take the complicated idea, and make it read at a glance.</p>
+
+		<div class="pf-frame">
+
+			<article class="pf-card">
+				<div class="pf-card__media">
+					<img src="assets/portfolio/Illustration.png" alt="Illustration work — character sketch">
+				</div>
+				<div class="pf-card__foot">
+					<span class="pf-card__num">01</span>
+					<span class="pf-card__label">Illustration</span>
+				</div>
+			</article>
+
+			<article class="pf-card">
+				<div class="pf-card__media">
+					<img src="assets/portfolio/Photography.png" alt="Photography work — car headlight detail">
+				</div>
+				<div class="pf-card__foot">
+					<span class="pf-card__num">02</span>
+					<span class="pf-card__label">Photography</span>
+				</div>
+			</article>
+
+			<article class="pf-card">
+				<div class="pf-card__media">
+					<img src="assets/portfolio/Animation.png" alt="Animation work — beverage can sequence">
+				</div>
+				<div class="pf-card__foot">
+					<span class="pf-card__num">03</span>
+					<span class="pf-card__label">Animation</span>
+				</div>
+			</article>
+
+			<article class="pf-card">
+				<div class="pf-card__media">
+					<img src="assets/portfolio/Motion%20Graphic.png" alt="Motion graphic work — Porsche 911 poster">
+				</div>
+				<div class="pf-card__foot">
+					<span class="pf-card__num">04</span>
+					<span class="pf-card__label">Motion Graphic</span>
+				</div>
+			</article>
+
+		</div>
+
+	</main>
+
+</div>
+
+</body>
+</html>

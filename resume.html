@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume — Rui Yang</title>
+<meta name="description" content="Resume of Rui Yang — Diploma in Multimedia Design, New Era University College.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ==========================================================
+     BACKGROUND ATMOSPHERE — stars, drifting blobs, accent arcs
+     ========================================================== -->
+<div class="bg" aria-hidden="true">
+	<div class="bg__stars"></div>
+
+	<div class="blob blob--pale"></div>
+	<div class="blob blob--accent"></div>
+	<div class="blob blob--soft"></div>
+
+	<svg class="bg__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+		<path d="M 120 -60 C 470 190, 560 520, 300 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 60 -60 C 420 200, 505 545, 235 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+		<path d="M 1500 300 C 1180 520, 1120 760, 1240 980" fill="none" stroke="#DE541E" stroke-width="1.5" />
+	</svg>
+</div>
+
+
+<div class="layout">
+
+	<!-- ==========================================================
+	     LEFT NAVIGATION RAIL
+	     ========================================================== -->
+	<aside class="rail">
+		<div class="rail__nav rail__nav--resume">
+			<nav aria-label="Main">
+				<ul class="nav">
+					<li class="nav__item"><a class="nav__link" href="index.html">HOME</a></li>
+					<li class="nav__item"><a class="nav__link" href="about.html">ABOUT ME</a></li>
+					<li class="nav__item"><a class="nav__link" href="portfolio.html">PORTFOLIO</a></li>
+					<li class="nav__item"><a class="nav__link" href="skills.html">SKILLS</a></li>
+					<li class="nav__item"><a class="nav__link nav__link--active" href="resume.html" aria-current="page">RESUME</a></li>
+					<li class="nav__item"><a class="nav__link" href="testimonials.html">TESTIMONIAL</a></li>
+					<li class="nav__item"><a class="nav__link" href="contact.html">CONTACT ME</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+
+	<!-- ==========================================================
+	     STAGE — resume preview + download (mirrors Slide 5)
+	     ========================================================== -->
+	<main class="stage">
+
+		<!-- left: preview stack -->
+		<div class="rs-frame" aria-hidden="true"></div>
+		<div class="rs-backdrop" aria-hidden="true"></div>
+		<div class="rs-corner" aria-hidden="true"></div>
+
+		<img class="rs-preview"
+		     src="assets/resume/Ruiyang's%20Resume.png"
+		     alt="Preview of Rui Yang's resume">
+
+		<!-- right: title -->
+		<h1 class="rs-title" data-text="RESUME">RESUME</h1>
+
+		<!-- right: hatched bands -->
+		<div class="rs-bands" aria-hidden="true">
+			<span class="rs-band rs-band--accent"></span>
+			<span class="rs-band rs-band--light"></span>
+			<span class="rs-band rs-band--accent"></span>
+		</div>
+
+		<!-- right: download -->
+		<div class="rs-screen" aria-hidden="true"></div>
+
+		<a class="rs-download" href="assets/resume/resume.pdf" download>
+			<span class="rs-download__text">DOWNLOAD</span>
+		</a>
+
+		<div class="rs-arrow" aria-hidden="true">
+			<svg viewBox="0 0 100 100">
+				<path d="M50 8 V70" />
+				<path d="M22 46 L50 74 L78 46" />
+				<path d="M16 92 H84" />
+			</svg>
+		</div>
+
+	</main>
+
+</div>
+
+</body>
+</html>
